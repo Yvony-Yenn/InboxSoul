@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 from enum import StrEnum
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class Category(StrEnum):
@@ -93,6 +93,22 @@ class TriageOutput(BaseModel):
     risk_flags: list[RiskFlag] = Field(default_factory=list)
     recommended_action: RecommendedAction
     confidence: float = Field(ge=0.0, le=1.0)
+
+    # LLM (Llama 3.1 8B) occasionally hallucinates risk_flag values that aren't in
+    # the RiskFlag enum (e.g. confusing a category like "work" with a risk flag).
+    # Silently drop unknown values: a missing flag is recoverable in Agent 2 (it
+    # has scalar spam_level + confidence to fall back on); a hard validation
+    # failure here would discard the entire triage for one bad token.
+    # Scalar enums (category, priority, spam_level, ...) are *not* tolerated this
+    # way — they are required signals, and hallucinations there should bubble up
+    # so the orchestrator can retry or route to human review.
+    @field_validator("risk_flags", mode="before")
+    @classmethod
+    def _drop_unknown_risk_flags(cls, v: object) -> object:
+        if not isinstance(v, list):
+            return v
+        valid = {flag.value for flag in RiskFlag}
+        return [f for f in v if isinstance(f, str) and f in valid]
 
 
 class Draft(BaseModel):

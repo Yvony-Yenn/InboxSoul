@@ -30,8 +30,15 @@ All enum strings are case-sensitive and must match exactly. Anything outside the
 - `summary` — one neutral sentence, no opinions, no calls to action.
 - `key_points` — atomic, self-contained facts. Each one stands on its own and is meaningful out of context.
 - `priority` — urgency to the **recipient**, not the sender's tone or self-described importance.
-- `spam_level` — `definite_spam` only for blatant fraud/marketing-blast; `suspicious` for anything borderline; `not_spam` otherwise.
-- `reply_type` — `must_review` for high-stakes replies; `draft_later` for replies that aren't time-sensitive; `one_click` for trivial acks; `no_reply` for newsletters/notifications.
+- `spam_level` — classify based on **concrete signals**, not vibes:
+  - `definite_spam` — any of: ALL-CAPS subject ("50% OFF", "ACT NOW"), urgency hooks ("ENDS TONIGHT", "LAST CHANCE"), generic greeting + unsubscribe footer + promotional CTA, lottery/prize/inheritance scams, crypto airdrops, dating-app blasts. **Marketing emails from companies you don't have a real relationship with are `definite_spam`.**
+  - `suspicious` — looks legit on the surface but one red flag (slightly off sender domain, awkward generic greeting like "Dear Customer", unexpected attachments, asks you to click a shortened URL).
+  - `not_spam` — known personal/work senders, transactional notifications from services you actually use (GitHub, Stripe, your school's registrar), conversational threads.
+- `reply_type` — match the **email's required response style**, not its topic:
+  - `one_click` — short acknowledgements you would type in <10 seconds: "OK", "Thanks", "Got it", "Sounds good", "Yes, that works for me", "收到". Status confirmations, calendar moves, meeting reschedules where you only need to say yes/no.
+  - `draft_later` — substantive response needed but not urgent (a colleague asks for feedback by next week; a friend asks about weekend plans).
+  - `must_review` — high-stakes wording matters: financial decisions, legal/HR/contract language, hiring decisions, anything where the wrong words cost real money or relationships.
+  - `no_reply` — newsletters, notifications, automated alerts, marketing, anything the sender doesn't expect a reply to.
 - `recommended_action` — your suggestion only; the downstream rule engine has final say and will override on safety grounds.
 
 ## risk_flags — conservative policy (IMPORTANT)
