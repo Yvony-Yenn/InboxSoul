@@ -1,0 +1,1 @@
+"""HTTP API + (future) web UI for the daemon. FastAPI lives here for Phase 2 Outlook plugin."""

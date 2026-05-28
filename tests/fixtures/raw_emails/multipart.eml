@@ -1,0 +1,17 @@
+Message-ID: <mp-001@acme.com>
+From: "Bob Smith" <bob@acme.com>
+To: maan@northeastern.edu
+Subject: PR review request
+Date: Tue, 26 May 2026 10:00:00 -0400
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="BOUND"
+
+--BOUND
+Content-Type: text/plain; charset="utf-8"
+
+Could you review PR #517? Touches the auth path.
+--BOUND
+Content-Type: text/html; charset="utf-8"
+
+<html><body><p>Could you review <b>PR #517</b>? Touches the auth path.</p></body></html>
+--BOUND--

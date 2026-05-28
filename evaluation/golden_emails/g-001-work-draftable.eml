@@ -1,0 +1,17 @@
+Message-ID: <g-001@acme.com>
+From: "Sarah Chen" <sarah.chen@acme.com>
+To: maan@northeastern.edu
+Subject: Quick question on the API design doc
+Date: Wed, 27 May 2026 09:15:00 -0400
+Content-Type: text/plain; charset="utf-8"
+
+Hey Maan,
+
+Reading through your API design doc for the inbox triage project. Two questions:
+
+1. Are we going with REST or gRPC for the daemon <-> Outlook plugin handshake?
+2. Did you settle on the retry policy for the LLM calls?
+
+No rush — just want to make sure we're aligned before I write up the integration test plan.
+
+Sarah

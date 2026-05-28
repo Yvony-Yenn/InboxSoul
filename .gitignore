@@ -43,3 +43,6 @@ chroma/
 # OAuth token caches — they contain refresh tokens, never commit
 *token*.json
 !tests/**/*.json
+
+# generated eval reports
+evaluation/reports/

@@ -1,0 +1,1 @@
+"""Safety layer — the project's RED LINE. Never relax these rules for convenience."""

@@ -1,0 +1,1 @@
+"""RAG layer: vector store + retrievers for Agent 4."""

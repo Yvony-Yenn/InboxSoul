@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>InboxSoul</title>
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <link href="taskpane.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <header>
+        <h1>InboxSoul</h1>
+        <p class="subtitle">Multi-agent email triage · local daemon · privacy-first</p>
+    </header>
+
+    <section id="sideload-msg" class="card">
+        <p>Please sideload this add-in to use it. See the README.</p>
+    </section>
+
+    <section id="loading" class="card" hidden>
+        <p>Running pipeline on localhost daemon…</p>
+        <div class="spinner"></div>
+    </section>
+
+    <section id="error" class="card error" hidden>
+        <h3>Pipeline error</h3>
+        <pre id="error-detail"></pre>
+        <button id="btn-retry">Retry</button>
+    </section>
+
+    <section id="result" class="card" hidden>
+        <div class="block">
+            <h3>Incoming</h3>
+            <p><strong>From:</strong> <span id="email-sender"></span></p>
+            <p><strong>Subject:</strong> <span id="email-subject"></span></p>
+        </div>
+
+        <div class="block">
+            <h3>AI Triage <span id="triage-category" class="badge"></span></h3>
+            <p id="triage-summary-text"></p>
+            <p><strong>Priority:</strong> <span id="triage-priority"></span>
+               · <strong>Spam:</strong> <span id="triage-spam"></span>
+               · <strong>Confidence:</strong> <span id="triage-confidence"></span></p>
+            <p><strong>Risk flags:</strong> <span id="triage-risks"></span></p>
+        </div>
+
+        <div class="block">
+            <h3>Pipeline decisions</h3>
+            <p><strong>Safety:</strong> <span id="safety-decision"></span></p>
+            <p><strong>Agent 2 (spam):</strong> <span id="spam-decision"></span></p>
+            <p><strong>Agent 3 (policy):</strong> <span id="policy-decision"></span></p>
+            <p class="final-action"><strong>Final action:</strong> <span id="final-action"></span></p>
+        </div>
+
+        <div id="draft-section" class="block" hidden>
+            <h3>AI Draft <small>(editable — never auto-sent)</small></h3>
+            <label>Subject</label>
+            <input id="draft-subject" type="text" />
+            <label>Body</label>
+            <textarea id="draft-body" rows="8"></textarea>
+            <div id="actions">
+                <button id="btn-send" class="primary">Open in Reply</button>
+                <button id="btn-discard">Discard</button>
+            </div>
+            <p id="action-status" class="status"></p>
+        </div>
+
+        <div id="no-draft-section" class="block" hidden>
+            <h3>No draft generated</h3>
+            <p>The pipeline decided this email doesn't need a draft. See "Final action" above.</p>
+            <button id="btn-acknowledge">Acknowledge</button>
+        </div>
+    </section>
+</body>
+</html>
