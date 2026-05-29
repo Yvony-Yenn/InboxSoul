@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Awaitable, Callable
 from datetime import datetime
 from enum import StrEnum
 
@@ -141,3 +142,47 @@ class SpamDecisionOutput(BaseModel):
     # Which high-risk flags (if any) triggered rule #1 above
     blocked_by_risk_flags: list[RiskFlag] = Field(default_factory=list)
     confidence: float = Field(ge=0.0, le=1.0)
+
+
+class ReplyPolicy(StrEnum):
+    DRAFT_NOW = "draft_now"
+    DEFER_TO_USER = "defer_to_user"
+    NO_REPLY = "no_reply"
+
+
+class ReplyPolicyOutput(BaseModel):
+    """Agent 3 output. Pure rule engine — consumes TriageOutput + SpamDecisionOutput."""
+
+    decision: ReplyPolicy
+    reason: str
+    confidence: float = Field(ge=0.0, le=1.0)
+
+
+class SafetyDecision(BaseModel):
+    """Safety scanner verdict. When override_action is set, the orchestrator must
+    use it instead of triage.recommended_action (red-line rule #2)."""
+
+    override_action: RecommendedAction | None = None
+    reason: str | None = None
+
+    @property
+    def overridden(self) -> bool:
+        return self.override_action is not None
+
+
+class ProcessResult(BaseModel):
+    """Full pipeline output for one email — returned by the orchestrator and the API."""
+
+    cleaned_email: CleanedEmail
+    triage: TriageOutput
+    safety: SafetyDecision
+    spam_decision: SpamDecisionOutput
+    reply_policy: ReplyPolicyOutput
+    final_action: RecommendedAction
+    draft: Draft | None = None
+
+
+# Agent 1 / Agent 2 are injected into the orchestrator (teammate-owned). These
+# alias their call signatures so the orchestrator stays decoupled from concretes.
+TriageRunner = Callable[[CleanedEmail], Awaitable[TriageOutput]]
+SpamDecider = Callable[[TriageOutput], SpamDecisionOutput]
