@@ -46,3 +46,6 @@ chroma/
 
 # generated eval reports
 evaluation/reports/
+
+# Node (outlook_addin)
+node_modules/
