@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "InboxSoul for Gmail",
+  "version": "0.1.0",
+  "description": "Run the InboxSoul multi-agent triage pipeline on the open Gmail email.",
+  "host_permissions": ["http://localhost:8000/*"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["https://mail.google.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

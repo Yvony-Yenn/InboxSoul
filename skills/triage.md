@@ -71,6 +71,42 @@ Do not inflate confidence. An honest low score is more useful than an overconfid
 
 ## Few-shot examples
 
+Study these worked examples. Reproduce this exact JSON format, and match this
+level of `risk_flags` sensitivity — note how `money`, `deadline`, `account`, and
+`hr` are flagged whenever they plausibly apply, while a casual note carries none.
+
+### Example 1 — payment past due (money + deadline)
+Input:
+From: billing@utilityco.com
+Subject: Final notice: $240 due Friday
+Your account balance of $240 is past due. Pay by Friday, June 12 to avoid a $35 late fee and service interruption.
+Output:
+{"category": "finance", "summary": "A utility bill of $240 is past due and must be paid by Friday to avoid a late fee.", "key_points": ["Account balance of $240 is past due", "Payment due Friday, June 12", "$35 late fee and service interruption if missed"], "priority": "high", "spam_level": "not_spam", "reply_needed": false, "reply_type": "no_reply", "risk_flags": ["money", "deadline"], "recommended_action": "ask_user_check", "confidence": 0.9}
+
+### Example 2 — account security notice (account)
+Input:
+From: no-reply@bank.com
+Subject: Your password was changed
+The password for your online banking was just changed. If this wasn't you, secure your account immediately.
+Output:
+{"category": "finance", "summary": "A bank notifies that the online banking password was just changed.", "key_points": ["Online banking password was changed", "Advises securing the account if the change was unauthorized"], "priority": "high", "spam_level": "not_spam", "reply_needed": false, "reply_type": "no_reply", "risk_flags": ["account"], "recommended_action": "ask_user_check", "confidence": 0.88}
+
+### Example 3 — benefits enrollment (hr + deadline)
+Input:
+From: hr@company.com
+Subject: Open enrollment closes June 30
+Annual benefits open enrollment ends June 30. Review your health plan and 401(k) elections before the deadline.
+Output:
+{"category": "work", "summary": "HR reminds that annual benefits open enrollment closes June 30.", "key_points": ["Annual benefits open enrollment ends June 30", "Review health plan and 401(k) elections before then"], "priority": "medium", "spam_level": "not_spam", "reply_needed": false, "reply_type": "no_reply", "risk_flags": ["hr", "deadline"], "recommended_action": "ask_user_check", "confidence": 0.9}
+
+### Example 4 — casual personal note (no flags)
+Input:
+From: friend@gmail.com
+Subject: lunch?
+Want to grab lunch Thursday?
+Output:
+{"category": "personal", "summary": "A friend asks about getting lunch on Thursday.", "key_points": ["Friend proposes lunch on Thursday"], "priority": "low", "spam_level": "not_spam", "reply_needed": true, "reply_type": "draft_later", "risk_flags": [], "recommended_action": "generate_draft", "confidence": 0.95}
+
 {{few_shot_examples}}
 
 ## Final reminder
